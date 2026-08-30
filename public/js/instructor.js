@@ -78,7 +78,7 @@ socket.on('groups_assigned', ({ groups }) => {
   sessionData.assignedGroups = groups;
   sessionData.isAssigned = true;
   showShuffleAnimation(() => {
-    updateGroupsUI();
+    updateUI();
     triggerConfetti();
   });
 });
@@ -86,7 +86,7 @@ socket.on('groups_assigned', ({ groups }) => {
 socket.on('groups_updated', ({ groups }) => {
   sessionData.assignedGroups = groups;
   sessionData.isAssigned = true;
-  updateGroupsUI();
+  updateUI();
 });
 
 socket.on('groups_reset', () => {
@@ -102,13 +102,13 @@ socket.on('assignment_error', ({ message }) => {
 // 3. UI 업데이트 함수들
 function updateUI() {
   updateRosterUI();
-  if (sessionData.isAssigned && sessionData.assignedGroups) {
-    elWaitingSection.classList.add('hidden');
-    elResultsSection.classList.remove('hidden');
+  if (sessionData.isAssigned && sessionData.assignedGroups && sessionData.assignedGroups.length > 0) {
+    if (elWaitingSection) elWaitingSection.classList.add('hidden');
+    if (elResultsSection) elResultsSection.classList.remove('hidden');
     updateGroupsUI();
   } else {
-    elWaitingSection.classList.remove('hidden');
-    elResultsSection.classList.add('hidden');
+    if (elWaitingSection) elWaitingSection.classList.remove('hidden');
+    if (elResultsSection) elResultsSection.classList.add('hidden');
   }
 }
 
