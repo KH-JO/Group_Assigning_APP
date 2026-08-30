@@ -49,6 +49,22 @@ const SKILLS_CONFIG = [
 const ROLES_4 = ['도입 및 정리 활동', '활동 1', '활동 2', '활동 3'];
 const ROLES_3 = ['활동 1', '활동 2', '활동 3'];
 
+const ROLE_ORDER = {
+  '도입 및 정리 활동': 1,
+  '활동 1': 2,
+  '활동 2': 3,
+  '활동 3': 4
+};
+
+function sortMembersByRole(members) {
+  if (!members || !Array.isArray(members)) return [];
+  return [...members].sort((a, b) => {
+    const orderA = ROLE_ORDER[a.role] || 99;
+    const orderB = ROLE_ORDER[b.role] || 99;
+    return orderA - orderB;
+  });
+}
+
 /**
  * 배열 무작위 셔플 (Fisher-Yates)
  */
@@ -199,17 +215,19 @@ function assignGroups(students) {
     }
     const shuffledRoles = shuffle(availableRoles);
 
-    // 각 조원에게 역할 부여
+    // 각 조원에게 역할 무작위 부여 후, 역할 순서(도입및정리 -> 활동1 -> 활동2 -> 활동3)대로 정렬
     const assignedMembers = g.members.map((member, mIdx) => ({
       ...member,
       role: shuffledRoles[mIdx] || `활동 ${mIdx + 1}`
     }));
 
+    const sortedMembers = sortMembersByRole(assignedMembers);
+
     return {
       groupNumber: g.groupNumber,
       targetSize: g.targetSize,
       skillInfo,
-      members: assignedMembers
+      members: sortedMembers
     };
   });
 }
@@ -220,6 +238,8 @@ if (typeof module !== 'undefined' && module.exports) {
     SKILLS_CONFIG,
     ROLES_4,
     ROLES_3,
+    ROLE_ORDER,
+    sortMembersByRole,
     shuffle,
     calculateGroupSizes,
     assignSkillsToGroups,
@@ -230,6 +250,8 @@ if (typeof module !== 'undefined' && module.exports) {
     SKILLS_CONFIG,
     ROLES_4,
     ROLES_3,
+    ROLE_ORDER,
+    sortMembersByRole,
     shuffle,
     calculateGroupSizes,
     assignSkillsToGroups,

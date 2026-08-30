@@ -139,9 +139,18 @@ function findAndShowMyGroup(groups) {
   }
 
   if (elTeammatesList) {
-    elTeammatesList.innerHTML = myGroup.members.map(m => {
+    const ROLE_ORDER = {
+      '도입 및 정리 활동': 1,
+      '활동 1': 2,
+      '활동 2': 3,
+      '활동 3': 4
+    };
+    const sortedMembers = [...myGroup.members].sort((a, b) => {
+      return (ROLE_ORDER[a.role] || 99) - (ROLE_ORDER[b.role] || 99);
+    });
+
+    elTeammatesList.innerHTML = sortedMembers.map(m => {
       const isMe = m.studentId === myInfo.studentId;
-      const isMale = m.gender === '남';
       return `
         <div class="flex items-center justify-between p-3 rounded-xl border ${isMe ? 'bg-indigo-50/60 border-indigo-300 ring-2 ring-indigo-400/20' : 'bg-slate-50 border-slate-200'}">
           <div class="flex items-center gap-2.5">

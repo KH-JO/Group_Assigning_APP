@@ -60,15 +60,9 @@ result19.forEach(g => {
   assert.ok(g.skillInfo.week === 14 || g.skillInfo.week === 15, '주차는 14 또는 15주차여야 함');
   const roles = g.members.map(m => m.role);
   if (g.members.length === 4) {
-    assert.ok(roles.includes('도입 및 정리 활동'), '4인조는 도입 및 정리 활동이 포함되어야 함');
-    assert.ok(roles.includes('활동 1'), '4인조는 활동 1이 포함되어야 함');
-    assert.ok(roles.includes('활동 2'), '4인조는 활동 2가 포함되어야 함');
-    assert.ok(roles.includes('활동 3'), '4인조는 활동 3이 포함되어야 함');
+    assert.deepStrictEqual(roles, ['도입 및 정리 활동', '활동 1', '활동 2', '활동 3'], '4인조는 [도입 및 정리 활동, 활동 1, 활동 2, 활동 3] 순서로 정렬되어야 함');
   } else if (g.members.length === 3) {
-    assert.ok(!roles.includes('도입 및 정리 활동'), '3인조는 도입 및 정리 활동이 제외되어야 함');
-    assert.ok(roles.includes('활동 1'), '3인조는 활동 1이 포함되어야 함');
-    assert.ok(roles.includes('활동 2'), '3인조는 활동 2가 포함되어야 함');
-    assert.ok(roles.includes('활동 3'), '3인조는 활동 3이 포함되어야 함');
+    assert.deepStrictEqual(roles, ['활동 1', '활동 2', '활동 3'], '3인조는 [활동 1, 활동 2, 활동 3] 순서로 정렬되어야 함');
   }
 });
 console.log('✅ 19명 조편성 및 역할/성별 배정 검증 통과!');

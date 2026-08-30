@@ -315,6 +315,12 @@ function handleDrop(e, targetGroupIdx) {
   const [movedMember] = groups[srcGroupIdx].members.splice(srcMemberIdx, 1);
   groups[targetGroupIdx].members.push(movedMember);
 
+  // 역할 순서대로 정렬 유지
+  if (window.Assigner && Assigner.sortMembersByRole) {
+    groups[srcGroupIdx].members = Assigner.sortMembersByRole(groups[srcGroupIdx].members);
+    groups[targetGroupIdx].members = Assigner.sortMembersByRole(groups[targetGroupIdx].members);
+  }
+
   sessionData.assignedGroups = groups;
   socket.emit('update_groups', { roomId: currentRoom, groups });
   updateGroupsUI();
@@ -325,6 +331,12 @@ function handleDrop(e, targetGroupIdx) {
 function changeRole(groupIdx, memberIdx, newRole) {
   const groups = [...sessionData.assignedGroups];
   groups[groupIdx].members[memberIdx].role = newRole;
+
+  // 역할 순서대로 정렬 유지
+  if (window.Assigner && Assigner.sortMembersByRole) {
+    groups[groupIdx].members = Assigner.sortMembersByRole(groups[groupIdx].members);
+  }
+
   sessionData.assignedGroups = groups;
   socket.emit('update_groups', { roomId: currentRoom, groups });
   updateGroupsUI();
