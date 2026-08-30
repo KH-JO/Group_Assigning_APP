@@ -149,7 +149,7 @@ function updateRosterUI() {
             <div>
               <div class="flex items-center gap-2">
                 <span class="font-bold text-slate-900 dark:text-white text-base">${s.name}</span>
-                <span class="px-2 py-0.5 text-xs font-semibold rounded-full ${s.gender === '남' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300' : 'bg-pink-100 text-pink-700 dark:bg-pink-900/50 dark:text-pink-300'}">
+                <span class="px-2 py-0.5 text-xs font-semibold rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-600">
                   ${s.gender}
                 </span>
                 ${s.manual ? '<span class="text-[10px] px-1.5 py-0.5 bg-amber-100 text-amber-700 rounded">수동</span>' : ''}
@@ -177,7 +177,6 @@ function updateGroupsUI() {
     const borderAccent = is14Week ? 'border-sky-300 dark:border-sky-800' : 'border-indigo-300 dark:border-indigo-800';
 
     const membersHtml = g.members.map((m, mIdx) => {
-      const isMale = m.gender === '남';
       return `
         <div 
           class="draggable-card p-3 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex items-center justify-between gap-2 hover:border-blue-400 transition"
@@ -188,8 +187,8 @@ function updateGroupsUI() {
           ondragend="handleDragEnd(event)"
         >
           <div class="flex items-center gap-2.5 min-w-0">
-            <div class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs ${isMale ? 'bg-blue-100 text-blue-700' : 'bg-pink-100 text-pink-700'}">
-              ${isMale ? '남' : '여'}
+            <div class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600">
+              ${m.gender}
             </div>
             <div class="truncate">
               <div class="flex items-center gap-1.5">

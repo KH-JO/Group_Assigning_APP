@@ -143,13 +143,13 @@ function findAndShowMyGroup(groups) {
       const isMe = m.studentId === myInfo.studentId;
       const isMale = m.gender === '남';
       return `
-        <div class="flex items-center justify-between p-3 rounded-xl border ${isMe ? 'bg-blue-50 border-blue-300 ring-2 ring-blue-400/30' : 'bg-slate-50 border-slate-200'}">
+        <div class="flex items-center justify-between p-3 rounded-xl border ${isMe ? 'bg-indigo-50/60 border-indigo-300 ring-2 ring-indigo-400/20' : 'bg-slate-50 border-slate-200'}">
           <div class="flex items-center gap-2.5">
-            <span class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${isMale ? 'bg-blue-100 text-blue-700' : 'bg-pink-100 text-pink-700'}">
-              ${isMale ? '남' : '여'}
+            <span class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold bg-slate-200 text-slate-700">
+              ${m.gender}
             </span>
             <div>
-              <span class="font-bold text-slate-800 text-sm">${m.name} ${isMe ? '<span class="text-xs text-blue-600 font-semibold">(나)</span>' : ''}</span>
+              <span class="font-bold text-slate-800 text-sm">${m.name} ${isMe ? '<span class="text-xs text-indigo-600 font-semibold">(나)</span>' : ''}</span>
               <p class="text-[11px] text-slate-400 font-mono">${m.studentId}</p>
             </div>
           </div>

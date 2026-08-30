@@ -36,7 +36,7 @@ const ExportManager = {
           <td style="text-align:center; padding: 8px 12px; border: 1px solid #cbd5e1; font-size: 13px; font-weight:600;">${m.studentId}</td>
           <td style="text-align:center; padding: 8px 12px; border: 1px solid #cbd5e1; font-size: 13px; font-weight:700;">${m.name}</td>
           <td style="text-align:center; padding: 8px 12px; border: 1px solid #cbd5e1; font-size: 13px;">
-            <span style="display:inline-block; padding: 2px 8px; border-radius: 9999px; font-size: 11px; font-weight:600; background: ${m.gender === '남' ? '#dbeafe' : '#fce7f3'}; color: ${m.gender === '남' ? '#1e40af' : '#9d174d'};">
+            <span style="display:inline-block; padding: 2px 8px; border-radius: 9999px; font-size: 11px; font-weight:600; background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0;">
               ${m.gender}
             </span>
           </td>
