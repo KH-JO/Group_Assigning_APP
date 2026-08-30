@@ -343,7 +343,7 @@ function changeGroupSkill(groupIdx, skillId) {
   updateGroupsUI();
 }
 
-// 5. 셔플 애니메이션 및 특수효과
+// 5. 셔플 애니메이션 및 사운드 특수효과
 function showShuffleAnimation(callback) {
   if (!elShuffleModal) {
     if (callback) callback();
@@ -352,48 +352,157 @@ function showShuffleAnimation(callback) {
 
   elShuffleModal.classList.remove('hidden');
   const names = (sessionData.students || []).map(s => s.name);
-  let count = 0;
-  const maxIterations = 25;
+  const totalStudents = names.length;
 
-  const interval = setInterval(() => {
-    count++;
-    const randomName1 = names[Math.floor(Math.random() * names.length)] || '학생';
-    const randomName2 = names[Math.floor(Math.random() * names.length)] || '학생';
-    const randomSkill = Assigner.SKILLS_CONFIG[Math.floor(Math.random() * Assigner.SKILLS_CONFIG.length)].fullName;
+  let currentTick = 0;
+  const totalTicks = 48; // 약 4.5~5.0초 동안 재생
+  
+  function nextTick() {
+    currentTick++;
+    
+    // 무작위 학생 및 기능 추출
+    const rIdx1 = Math.floor(Math.random() * names.length);
+    let rIdx2 = Math.floor(Math.random() * names.length);
+    if (names.length > 1 && rIdx1 === rIdx2) {
+      rIdx2 = (rIdx1 + 1) % names.length;
+    }
+    const randomName1 = names[rIdx1] || '학생 A';
+    const randomName2 = names[rIdx2] || '학생 B';
+    const randomSkill = Assigner.SKILLS_CONFIG[Math.floor(Math.random() * Assigner.SKILLS_CONFIG.length)];
+
+    // 셔플 틱 효과음 재생 (점점 감속하며 피치 변화)
+    const pitch = 0.85 + (currentTick / totalTicks) * 0.4;
+    if (window.soundFX) {
+      window.soundFX.playShuffleTick(pitch);
+    }
+
+    // 진행도에 따른 메시지 변경
+    const progressPercent = Math.round((currentTick / totalTicks) * 100);
+    let phaseTitle = '🎲 실시간 무작위 매칭 중...';
+    let phaseSubtitle = '공정하고 균형잡힌 조를 조합하고 있습니다';
+
+    if (progressPercent > 85) {
+      phaseTitle = '🎯 배정 확정 완료!';
+      phaseSubtitle = '결과를 강의실 화면에 공개합니다!';
+    } else if (progressPercent > 55) {
+      phaseTitle = '⚖️ 4대 언어기능 & 14/15주차 배분 중...';
+      phaseSubtitle = '듣기 · 읽기 · 말하기 · 쓰기 최적 매칭';
+    } else if (progressPercent > 30) {
+      phaseTitle = '👥 조별 인원 및 역할 배정 중...';
+      phaseSubtitle = `${totalStudents}명의 학생을 균형있게 분배 중입니다`;
+    }
 
     if (elShuffleText) {
       elShuffleText.innerHTML = `
-        <div class="text-3xl font-black text-blue-600 dark:text-blue-400 mb-2">🎲 조편성 무작위 매칭 중...</div>
-        <div class="text-xl font-bold text-slate-700 dark:text-slate-300">${randomName1} ↔ ${randomName2}</div>
-        <div class="text-sm font-medium text-emerald-600 mt-2">📌 기능 분배: ${randomSkill}</div>
+        <div class="text-2xl sm:text-3xl font-black text-indigo-600 dark:text-indigo-400 mb-2 transition-all">
+          ${phaseTitle}
+        </div>
+        <div class="text-base text-slate-500 mb-4 font-medium">
+          ${phaseSubtitle}
+        </div>
+        <div class="flex items-center justify-center gap-3 py-2 px-4 bg-slate-100 dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-inner mb-3">
+          <span class="text-lg font-extrabold text-slate-800 dark:text-white">${randomName1}</span>
+          <span class="text-indigo-500 font-black animate-pulse">⇄</span>
+          <span class="text-lg font-extrabold text-slate-800 dark:text-white">${randomName2}</span>
+        </div>
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold ${randomSkill.badgeClass}">
+          <span>📌 매칭 기능: ${randomSkill.fullName} (${randomSkill.weekText})</span>
+        </div>
+        <div class="w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full mt-5 overflow-hidden">
+          <div class="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 h-full rounded-full transition-all duration-75" style="width: ${progressPercent}%"></div>
+        </div>
       `;
     }
 
-    if (count >= maxIterations) {
-      clearInterval(interval);
-      elShuffleModal.classList.add('hidden');
-      if (callback) callback();
+    if (currentTick < totalTicks) {
+      // 감속 커브: 초반(0~30틱)은 65ms, 후반(30~48틱)은 점점 느려짐 (최대 360ms)
+      let delay = 65;
+      if (currentTick > 30) {
+        const remainingFraction = (currentTick - 30) / (totalTicks - 30);
+        delay = 65 + Math.pow(remainingFraction, 2) * 320;
+      }
+      setTimeout(nextTick, delay);
+    } else {
+      // 셔플 종료
+      setTimeout(() => {
+        elShuffleModal.classList.add('hidden');
+        if (callback) callback();
+      }, 400);
     }
-  }, 80);
+  }
+
+  nextTick();
 }
 
 function triggerConfetti() {
+  // 축하 팡파레 & 파티 팝 사운드 동시 재생
+  if (window.soundFX) {
+    window.soundFX.playCelebrationFanfare();
+  }
+
   if (typeof confetti === 'function') {
+    // 1. 중앙 대형 버스트
     confetti({
-      particleCount: 80,
-      spread: 70,
-      origin: { y: 0.6 }
+      particleCount: 100,
+      spread: 90,
+      origin: { y: 0.55 },
+      colors: ['#2563eb', '#7c3aed', '#059669', '#d97706', '#ec4899']
     });
+
+    // 2. 좌측 폭죽 캐논
+    setTimeout(() => {
+      confetti({
+        particleCount: 60,
+        angle: 60,
+        spread: 60,
+        origin: { x: 0, y: 0.7 }
+      });
+    }, 200);
+
+    // 3. 우측 폭죽 캐논
+    setTimeout(() => {
+      confetti({
+        particleCount: 60,
+        angle: 120,
+        spread: 60,
+        origin: { x: 1, y: 0.7 }
+      });
+    }, 400);
   }
 }
 
 // 6. 이벤트 바인딩
 function bindEvents() {
+  // 소리 켜기/끄기 토글
+  const btnToggleSound = document.getElementById('btn-toggle-sound');
+  const soundIcon = document.getElementById('sound-icon');
+  const soundText = document.getElementById('sound-text');
+
+  btnToggleSound?.addEventListener('click', () => {
+    if (!window.soundFX) return;
+    window.soundFX.isMuted = !window.soundFX.isMuted;
+    if (window.soundFX.isMuted) {
+      if (soundIcon) soundIcon.textContent = '🔇';
+      if (soundText) soundText.textContent = '소리 끔';
+      btnToggleSound.classList.add('opacity-60');
+    } else {
+      if (soundIcon) soundIcon.textContent = '🔊';
+      if (soundText) soundText.textContent = '소리 켬';
+      btnToggleSound.classList.remove('opacity-60');
+      // 오디오 컨텍스트 사전 활성화
+      window.soundFX.getAudioContext();
+    }
+  });
+
   // 조편성 버튼 클릭
   elBtnAssign?.addEventListener('click', () => {
     if (sessionData.students.length < 3) {
       alert('최소 3명 이상의 학생이 접속해야 조편성이 가능합니다.');
       return;
+    }
+    // 오디오 컨텍스트 사전 초기화 (사용자 제스처 연동)
+    if (window.soundFX) {
+      window.soundFX.getAudioContext();
     }
     socket.emit('execute_assignment', { roomId: currentRoom });
   });

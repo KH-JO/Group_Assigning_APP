@@ -52,6 +52,10 @@
       </div>
 
       <div class="flex items-center gap-2">
+        <button id="btn-toggle-sound" class="px-2.5 py-1.5 text-xs font-bold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 rounded-lg transition flex items-center gap-1 border border-slate-300 dark:border-slate-700" title="효과음 켜기/끄기">
+          <span id="sound-icon">🔊</span>
+          <span id="sound-text">소리 켬</span>
+        </button>
         <button id="btn-open-add-modal" class="px-3 py-1.5 text-xs font-bold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 rounded-lg transition flex items-center gap-1.5 border border-slate-300 dark:border-slate-700">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
           수동 학생 추가
@@ -239,6 +243,7 @@
 
   <!-- 스크립트 연결 -->
   <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/sound-effects.js"></script>
   <script src="/js/assigner.js"></script>
   <script src="/js/export-pdf.js"></script>
   <script src="/js/instructor.js"></script>
