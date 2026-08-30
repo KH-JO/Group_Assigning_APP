@@ -234,7 +234,13 @@
   <!-- 4. 셔플 애니메이션 모달 -->
   <div id="shuffle-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 shuffle-overlay hidden">
     <div class="text-center p-8 bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 max-w-lg w-full mx-4 animate-bounce-subtle">
-      <div class="text-6xl mb-4 animate-spin-slow">🎰</div>
+      <!-- 세련된 교육/매칭 아이콘 -->
+      <div class="relative w-20 h-20 mx-auto mb-4 flex items-center justify-center">
+        <div class="absolute inset-0 rounded-3xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 animate-spin-slow opacity-70 blur-sm"></div>
+        <div class="relative w-20 h-20 rounded-3xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center text-white shadow-xl shadow-indigo-500/30 text-4xl animate-pulse-subtle">
+          ✨
+        </div>
+      </div>
       <div id="shuffle-text" class="min-h-[100px] flex flex-col justify-center items-center">
         <div class="text-2xl font-black text-blue-600">배정 알고리즘 연산 중...</div>
       </div>
