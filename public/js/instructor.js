@@ -179,36 +179,34 @@ function updateGroupsUI() {
     const membersHtml = g.members.map((m, mIdx) => {
       return `
         <div 
-          class="draggable-card p-3 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex items-center justify-between gap-2 hover:border-blue-400 transition"
+          class="draggable-card p-3 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex items-center justify-between gap-2.5 hover:border-indigo-400 hover:shadow transition"
           draggable="true"
           data-group-idx="${gIdx}"
           data-member-idx="${mIdx}"
           ondragstart="handleDragStart(event, ${gIdx}, ${mIdx})"
           ondragend="handleDragEnd(event)"
         >
-          <div class="flex items-center gap-2.5 min-w-0">
-            <div class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600">
+          <div class="flex items-center gap-2.5 min-w-0 flex-1">
+            <div class="w-7 h-7 shrink-0 rounded-full flex items-center justify-center font-bold text-xs bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-600">
               ${m.gender}
             </div>
-            <div class="truncate">
-              <div class="flex items-center gap-1.5">
-                <span class="font-bold text-slate-900 dark:text-white text-sm truncate">${m.name}</span>
-                <span class="text-xs text-slate-400 font-mono">(${m.studentId.slice(-4)})</span>
-              </div>
+            <div class="flex items-baseline gap-2 min-w-0">
+              <span class="font-extrabold text-slate-900 dark:text-white text-sm whitespace-nowrap">${m.name}</span>
+              <span class="text-xs text-slate-400 dark:text-slate-400 font-mono whitespace-nowrap">${m.studentId}</span>
             </div>
           </div>
           
           <!-- 역할 변경 뱃지 드롭다운 버튼 -->
-          <div class="relative group/role">
-            <button class="role-badge bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-blue-100 hover:text-blue-700 transition">
+          <div class="relative group/role shrink-0">
+            <button class="role-badge whitespace-nowrap text-xs font-semibold px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-indigo-50 hover:text-indigo-700 dark:hover:bg-indigo-950/60 dark:hover:text-indigo-300 border border-slate-200 dark:border-slate-600 transition flex items-center gap-1">
               <span>${m.role || '역할 지정'}</span>
-              <svg class="w-3 h-3 ml-0.5 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+              <svg class="w-3 h-3 opacity-60 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
             </button>
-            <div class="absolute right-0 mt-1 hidden group-hover/role:block bg-white dark:bg-slate-800 shadow-lg border border-slate-200 dark:border-slate-700 rounded-lg py-1 z-30 w-36 text-xs font-medium">
-              <button onclick="changeRole(${gIdx}, ${mIdx}, '도입 및 정리 활동')" class="w-full text-left px-3 py-1.5 hover:bg-blue-50 dark:hover:bg-slate-700">도입 및 정리 활동</button>
-              <button onclick="changeRole(${gIdx}, ${mIdx}, '활동 1')" class="w-full text-left px-3 py-1.5 hover:bg-blue-50 dark:hover:bg-slate-700">활동 1</button>
-              <button onclick="changeRole(${gIdx}, ${mIdx}, '활동 2')" class="w-full text-left px-3 py-1.5 hover:bg-blue-50 dark:hover:bg-slate-700">활동 2</button>
-              <button onclick="changeRole(${gIdx}, ${mIdx}, '활동 3')" class="w-full text-left px-3 py-1.5 hover:bg-blue-50 dark:hover:bg-slate-700">활동 3</button>
+            <div class="absolute right-0 mt-1 hidden group-hover/role:block bg-white dark:bg-slate-800 shadow-xl border border-slate-200 dark:border-slate-700 rounded-xl py-1.5 z-30 w-40 text-xs font-medium">
+              <button onclick="changeRole(${gIdx}, ${mIdx}, '도입 및 정리 활동')" class="w-full text-left px-3.5 py-1.5 hover:bg-indigo-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200">도입 및 정리 활동</button>
+              <button onclick="changeRole(${gIdx}, ${mIdx}, '활동 1')" class="w-full text-left px-3.5 py-1.5 hover:bg-indigo-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200">활동 1</button>
+              <button onclick="changeRole(${gIdx}, ${mIdx}, '활동 2')" class="w-full text-left px-3.5 py-1.5 hover:bg-indigo-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200">활동 2</button>
+              <button onclick="changeRole(${gIdx}, ${mIdx}, '활동 3')" class="w-full text-left px-3.5 py-1.5 hover:bg-indigo-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200">활동 3</button>
             </div>
           </div>
         </div>
