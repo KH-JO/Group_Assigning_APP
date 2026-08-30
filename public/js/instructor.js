@@ -172,9 +172,9 @@ function updateGroupsUI() {
   const groups = sessionData.assignedGroups;
 
   elGroupsContainer.innerHTML = groups.map((g, gIdx) => {
-    const is14Week = g.skillInfo.week === 14;
-    const weekBg = is14Week ? 'bg-sky-500 text-white' : 'bg-indigo-600 text-white';
-    const borderAccent = is14Week ? 'border-sky-300 dark:border-sky-800' : 'border-indigo-300 dark:border-indigo-800';
+    const is13Week = g.skillInfo.week === 13;
+    const weekBg = is13Week ? 'bg-sky-500 text-white' : 'bg-indigo-600 text-white';
+    const borderAccent = is13Week ? 'border-sky-300 dark:border-sky-800' : 'border-indigo-300 dark:border-indigo-800';
 
     const membersHtml = g.members.map((m, mIdx) => {
       return `
@@ -395,7 +395,7 @@ function showShuffleAnimation(callback) {
       phaseTitle = '🎯 배정 확정 완료!';
       phaseSubtitle = '결과를 강의실 화면에 공개합니다!';
     } else if (progressPercent > 55) {
-      phaseTitle = '⚖️ 4대 언어기능 & 14/15주차 배분 중...';
+      phaseTitle = '⚖️ 4대 언어기능 & 13/14주차 배분 중...';
       phaseSubtitle = '듣기 · 읽기 · 말하기 · 쓰기 최적 매칭';
     } else if (progressPercent > 30) {
       phaseTitle = '👥 조별 인원 및 역할 배정 중...';

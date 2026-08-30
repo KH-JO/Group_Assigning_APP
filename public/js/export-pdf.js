@@ -99,7 +99,7 @@ const ExportManager = {
             <span>📅 <strong>편성 일자:</strong> ${today}</span>
             <span>👥 <strong>총 인원:</strong> ${totalStudents}명</span>
             <span>📊 <strong>편성 조 수:</strong> 총 ${groups.length}개 조</span>
-            <span>📌 <strong>주차 안내:</strong> 이해기능(14주차) / 표현기능(15주차)</span>
+            <span>📌 <strong>주차 안내:</strong> 이해기능(13주차) / 표현기능(14주차)</span>
           </div>
         </div>
 

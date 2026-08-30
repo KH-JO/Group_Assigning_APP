@@ -9,8 +9,8 @@ const SKILLS_CONFIG = [
     category: '이해기능',
     skill: '듣기',
     fullName: '이해기능 - 듣기',
-    week: 14,
-    weekText: '14주차',
+    week: 13,
+    weekText: '13주차',
     badgeClass: 'bg-blue-100 text-blue-800 border-blue-300 dark:bg-blue-900/40 dark:text-blue-300 dark:border-blue-700',
     colorHex: '#2563eb'
   },
@@ -19,8 +19,8 @@ const SKILLS_CONFIG = [
     category: '이해기능',
     skill: '읽기',
     fullName: '이해기능 - 읽기',
-    week: 14,
-    weekText: '14주차',
+    week: 13,
+    weekText: '13주차',
     badgeClass: 'bg-emerald-100 text-emerald-800 border-emerald-300 dark:bg-emerald-900/40 dark:text-emerald-300 dark:border-emerald-700',
     colorHex: '#059669'
   },
@@ -29,8 +29,8 @@ const SKILLS_CONFIG = [
     category: '표현기능',
     skill: '말하기',
     fullName: '표현기능 - 말하기',
-    week: 15,
-    weekText: '15주차',
+    week: 14,
+    weekText: '14주차',
     badgeClass: 'bg-amber-100 text-amber-800 border-amber-300 dark:bg-amber-900/40 dark:text-amber-300 dark:border-amber-700',
     colorHex: '#d97706'
   },
@@ -39,8 +39,8 @@ const SKILLS_CONFIG = [
     category: '표현기능',
     skill: '쓰기',
     fullName: '표현기능 - 쓰기',
-    week: 15,
-    weekText: '15주차',
+    week: 14,
+    weekText: '14주차',
     badgeClass: 'bg-purple-100 text-purple-800 border-purple-300 dark:bg-purple-900/40 dark:text-purple-300 dark:border-purple-700',
     colorHex: '#7c3aed'
   }

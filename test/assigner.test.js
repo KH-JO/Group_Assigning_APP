@@ -57,7 +57,7 @@ assert.ok(maleCounts19.every(count => count <= 1), '남학생 4명이 5개 조�
 // Check roles in 4-person groups vs 3-person groups
 result19.forEach(g => {
   assert.ok(g.skillInfo, '조별 기능 정보가 존재해야 함');
-  assert.ok(g.skillInfo.week === 14 || g.skillInfo.week === 15, '주차는 14 또는 15주차여야 함');
+  assert.ok(g.skillInfo.week === 13 || g.skillInfo.week === 14, '주차는 13 또는 14주차여야 함');
   const roles = g.members.map(m => m.role);
   if (g.members.length === 4) {
     assert.deepStrictEqual(roles, ['도입 및 정리 활동', '활동 1', '활동 2', '활동 3'], '4인조는 [도입 및 정리 활동, 활동 1, 활동 2, 활동 3] 순서로 정렬되어야 함');
