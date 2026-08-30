@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>영어과교육론1 - 그룹 수업 실연 자동 조편성</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              700: '#0369a1',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/css/style.css">
+  <!-- QRCode.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <!-- html2pdf.js for Korean PDF export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body class="bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col">
+
+  <!-- 상단 네비게이션 헤더 -->
+  <header class="bg-white/90 dark:bg-slate-900/90 backdrop-blur sticky top-0 z-40 border-b border-slate-200 dark:border-slate-800 shadow-sm no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+        </div>
+        <div>
+          <h1 class="text-lg sm:text-xl font-black text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
+            영어과교육론1
+            <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 font-bold">수업실연 조편성</span>
+          </h1>
+          <p class="text-xs text-slate-500">실시간 참여형 자동 조편성 & 4대 언어기능 매칭 시스템</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button id="btn-open-add-modal" class="px-3 py-1.5 text-xs font-bold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 rounded-lg transition flex items-center gap-1.5 border border-slate-300 dark:border-slate-700">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+          수동 학생 추가
+        </button>
+        <button id="btn-add-mock-students" class="px-3 py-1.5 text-xs font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/60 dark:text-indigo-300 rounded-lg transition border border-indigo-200 dark:border-indigo-800 flex items-center gap-1" title="시연 및 테스트를 위해 19명의 학생 데이터를 한 번에 입력합니다">
+          <span>✨</span> 모의 학생(19명) 등록
+        </button>
+        <button id="btn-clear-all" class="px-3 py-1.5 text-xs font-bold text-red-600 hover:bg-red-50 dark:hover:bg-red-950/50 rounded-lg transition border border-red-200 dark:border-red-800">
+          초기화
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 메인 컨텐츠 영역 -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+    <!-- 1. 학생 대기 및 접속 현황 섹션 (조편성 전) -->
+    <section id="waiting-section" class="space-y-6">
+      
+      <!-- 안내 및 QR 코드 배너 카드 -->
+      <div class="bg-gradient-to-r from-blue-700 via-indigo-700 to-purple-800 rounded-3xl p-6 sm:p-8 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="space-y-3 text-center md:text-left flex-1">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 text-xs font-bold backdrop-blur">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+            실시간 학생 접속 대기 중
+          </div>
+          <h2 class="text-2xl sm:text-4xl font-black leading-tight">
+            스마트폰으로 QR 코드를 스캔하여<br class="hidden sm:block">
+            학번과 이름을 등록해주세요!
+          </h2>
+          <p class="text-blue-100 text-sm sm:text-base">
+            접속 주소: <span id="join-url" class="font-mono font-bold underline bg-black/20 px-2 py-0.5 rounded">http://localhost:3000/join</span>
+          </p>
+          <div class="pt-2 flex flex-wrap items-center justify-center md:justify-start gap-4 text-xs font-medium text-blue-100">
+            <span>🔹 4인 1조 (미달 시 3인 조)</span>
+            <span>🔹 남학생 조별 균등 배정</span>
+            <span>🔹 4대 기능 & 주차 자동 분배</span>
+          </div>
+        </div>
+
+        <!-- QR 코드 박스 -->
+        <div class="bg-white p-4 rounded-2xl shadow-2xl flex flex-col items-center gap-2 text-slate-800">
+          <div id="qrcode" class="overflow-hidden rounded-lg"></div>
+          <span class="text-xs font-extrabold tracking-wider text-slate-600 uppercase">Scan to Join</span>
+        </div>
+      </div>
+
+      <!-- 접속 현황 통계 & 조편성 실행 바 -->
+      <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-6">
+          <div class="flex items-center gap-2">
+            <span class="text-slate-500 text-sm font-medium">총 접속 인원:</span>
+            <span id="student-count" class="text-3xl font-black text-blue-600 dark:text-blue-400">0</span>
+            <span class="text-slate-400 text-sm">명</span>
+          </div>
+          <div class="h-8 w-px bg-slate-200 dark:bg-slate-800"></div>
+          <div class="flex items-center gap-4 text-xs font-bold">
+            <span class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-blue-50 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">
+              남학생 <span id="male-count" class="font-black text-sm">0</span>명
+            </span>
+            <span class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-pink-50 text-pink-700 dark:bg-pink-900/40 dark:text-pink-300">
+              여학생 <span id="female-count" class="font-black text-sm">0</span>명
+            </span>
+          </div>
+        </div>
+
+        <button id="btn-assign" class="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-extrabold text-lg rounded-2xl shadow-lg shadow-indigo-500/30 transition transform active:scale-95 flex items-center justify-center gap-2 animate-pulse-subtle">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+          🎲 그룹배정 시작
+        </button>
+      </div>
+
+      <!-- 실시간 학생 접속 명단 그리드 -->
+      <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm">
+        <h3 class="text-base font-extrabold text-slate-900 dark:text-white mb-4 flex items-center justify-between">
+          <span class="flex items-center gap-2">
+            <span>📋</span> 현재 접속된 학생 목록
+          </span>
+          <span class="text-xs text-slate-400 font-normal">새로운 학생이 접속하면 자동으로 목록이 갱신됩니다.</span>
+        </h3>
+
+        <!-- 빈 상태 표시 -->
+        <div id="empty-list-state" class="py-16 text-center text-slate-400">
+          <div class="text-5xl mb-3">📱</div>
+          <p class="font-bold text-base text-slate-600 dark:text-slate-300">아직 접속한 학생이 없습니다.</p>
+          <p class="text-xs mt-1">학생들이 QR 코드를 스캔하거나 위 '모의 학생 등록' 버튼을 눌러보세요.</p>
+        </div>
+
+        <!-- 학생 목록 컨테이너 -->
+        <div id="student-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3"></div>
+      </div>
+    </section>
+
+    <!-- 2. 조편성 결과 화면 섹션 (조편성 완료 후) -->
+    <section id="results-section" class="hidden space-y-6">
+      
+      <!-- 상단 컨트롤 툴바 -->
+      <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4 no-print">
+        <div>
+          <h2 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white flex items-center gap-2">
+            🎉 조편성 완료 결과
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-500">
+            카드 속 학생을 드래그하여 조를 바꾸거나, 역할 뱃지를 눌러 세부 역할을 변경할 수 있습니다.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2.5">
+          <!-- PDF 다운로드 -->
+          <button id="btn-download-pdf" class="px-4 py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm rounded-xl shadow-sm transition flex items-center gap-1.5">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+            조 편성 결과 내려받기 (PDF)
+          </button>
+
+          <!-- CSV 다운로드 -->
+          <button id="btn-download-csv" class="px-3.5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-sm transition flex items-center gap-1.5">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+            엑셀 (CSV)
+          </button>
+
+          <!-- 재배정 -->
+          <button id="btn-reassign" class="px-3.5 py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-sm rounded-xl transition flex items-center gap-1.5 border border-slate-300 dark:border-slate-700">
+            🔄 다시 배정
+          </button>
+
+          <!-- 대기화면 -->
+          <button id="btn-back-to-waiting" class="px-3 py-2.5 text-xs text-slate-500 hover:text-slate-700 font-medium">
+            대기화면 복귀
+          </button>
+        </div>
+      </div>
+
+      <!-- 조별 카드 렌더링 컨테이너 -->
+      <div id="groups-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"></div>
+
+    </section>
+
+  </main>
+
+  <!-- 3. 수동 학생 추가 모달 -->
+  <div id="modal-add-student" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm hidden">
+    <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 max-w-md w-full mx-4 shadow-2xl border border-slate-200 dark:border-slate-800">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-black text-slate-900 dark:text-white">수동 학생 추가</h3>
+        <button id="btn-close-add-modal" class="text-slate-400 hover:text-slate-600">✕</button>
+      </div>
+
+      <form id="form-manual-add" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-600 dark:text-slate-300 mb-1">학번</label>
+          <input type="text" id="input-manual-id" required placeholder="예: 20241234" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-600 dark:text-slate-300 mb-1">이름</label>
+          <input type="text" id="input-manual-name" required placeholder="예: 홍길동" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-600 dark:text-slate-300 mb-1">성별</label>
+          <div class="grid grid-cols-2 gap-3">
+            <label class="flex items-center justify-center gap-2 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-blue-50 has-[:checked]:bg-blue-100 has-[:checked]:border-blue-500 has-[:checked]:text-blue-800 font-bold text-sm">
+              <input type="radio" name="manual-gender" value="남" class="hidden"> 남학생
+            </label>
+            <label class="flex items-center justify-center gap-2 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-pink-50 has-[:checked]:bg-pink-100 has-[:checked]:border-pink-500 has-[:checked]:text-pink-800 font-bold text-sm">
+              <input type="radio" name="manual-gender" value="여" checked class="hidden"> 여학생
+            </label>
+          </div>
+        </div>
+
+        <button type="submit" class="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition">
+          추가하기
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 4. 셔플 애니메이션 모달 -->
+  <div id="shuffle-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 shuffle-overlay hidden">
+    <div class="text-center p-8 bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 max-w-lg w-full mx-4 animate-bounce-subtle">
+      <div class="text-6xl mb-4 animate-spin-slow">🎰</div>
+      <div id="shuffle-text" class="min-h-[100px] flex flex-col justify-center items-center">
+        <div class="text-2xl font-black text-blue-600">배정 알고리즘 연산 중...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 스크립트 연결 -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/assigner.js"></script>
+  <script src="/js/export-pdf.js"></script>
+  <script src="/js/instructor.js"></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "group-assigning-app",
+  "version": "1.0.0",
+  "description": "영어과교육론1 그룹 수업 실연 자동 조편성 웹 애플리케이션",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test/assigner.test.js"
+  },
+  "keywords": ["education", "group-assignment", "socket.io", "express"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "socket.io": "^4.7.5"
+  }
+}
